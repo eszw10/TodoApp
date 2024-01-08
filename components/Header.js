@@ -3,16 +3,22 @@ import { StyleSheet, Text, View} from 'react-native';
 export default function Header() {
   return (
     <View style={styles.header}>
+      <Text style={styles.title}>My Todos</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   header: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding:30
+    display:'flex',
+    paddingVertical:20,
+    paddingHorizontal:16,
+    backgroundColor: 'coral',
+  },
+  title: {
+    fontSize:20,
+    color:'white',
+    fontWeight:'bold'
   }
+   
 });

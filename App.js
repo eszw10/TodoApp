@@ -1,6 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
+import Header from './components/Header';
+import TodoItem from './components/TodoItem';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
+import AddTodo from './components/AddTodo';
 
 export default function App() {
   const [todos, setTodos] = useState([
@@ -9,17 +12,32 @@ export default function App() {
     {text: 'play on the pc', key: 3},
   ]) 
 
+  const pressHandler = (key) => {
+    setTodos(prev => prev.filter(todo => todo.key != key))
+  }
+
+  const addHandler = (text) => {
+    setTodos(prev => {
+      return [
+        {
+          text : text,
+          key : prev.length+1
+        },
+        ...prev
+      ]
+    })
+  }
 
   return (
     <View style={styles.container}>
-      {/*header*/}
+       <Header/>
       <View style={styles.content}>
-        {/*Form*/}
+        <AddTodo addHandler={addHandler}/>
         <View style = {styles.list}>
           <FlatList
             data={todos}
             renderItem={({item})=> (
-              <Text>{item.text}</Text>
+              <TodoItem item={item} presshandler={pressHandler}/>
             )}
           />
         </View>
@@ -32,11 +50,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding:30
+    paddingTop:38,
   },
   content: {
-    marginTop: 40,
-  }
+    padding: 40,
+  }, 
 });
