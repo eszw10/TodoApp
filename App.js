@@ -1,8 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import Header from './components/Header';
 import TodoItem from './components/TodoItem';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import AddTodo from './components/AddTodo';
 
 export default function App() {
@@ -17,32 +16,40 @@ export default function App() {
   }
 
   const addHandler = (text) => {
-    setTodos(prev => {
-      return [
-        {
-          text : text,
-          key : prev.length+1
-        },
-        ...prev
-      ]
-    })
+    if(text.length > 3) {
+      setTodos(prev => {
+        return [
+          {
+            text : text,
+            key : prev.length+1
+          },
+          ...prev
+        ]
+      })
+    } else {
+      Alert.alert('OOPS!', 'Todos must contain more than 3 characters!',[
+        {text:'UNDERSTOOD', onPress:() => console.log('alert closed')}
+      ])
+    }
   }
 
   return (
-    <View style={styles.container}>
-       <Header/>
-      <View style={styles.content}>
-        <AddTodo addHandler={addHandler}/>
-        <View style = {styles.list}>
-          <FlatList
-            data={todos}
-            renderItem={({item})=> (
-              <TodoItem item={item} presshandler={pressHandler}/>
-            )}
-          />
+    <TouchableWithoutFeedback onPress={()=> Keyboard.dismiss()}>
+      <View style={styles.container}>
+        <Header/>
+        <View style={styles.content}>
+          <AddTodo addHandler={addHandler}/>
+          <View style = {styles.list}>
+            <FlatList
+              data={todos}
+              renderItem={({item})=> (
+                <TodoItem item={item} presshandler={pressHandler}/>
+              )}
+            />
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -53,6 +60,10 @@ const styles = StyleSheet.create({
     paddingTop:38,
   },
   content: {
+    flex:1,
     padding: 40,
   }, 
+  list: {
+    flex:1
+  }
 });
